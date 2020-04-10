@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava'
+}
+
+sourceCompatibility = JavaVersion.VERSION_13
+targetCompatibility = JavaVersion.VERSION_13
+
+shadowJar {
+    archiveBaseName.set('helloOtus')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.otus.HelloOtus'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
