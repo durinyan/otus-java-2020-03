@@ -4,6 +4,7 @@ import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
 
+    private static final int DEFAULT_CAPACITY = 10;
     private int size;
     private Object[] values;
 
@@ -14,7 +15,7 @@ public class MyArrayList<E> implements List<E> {
 
     public MyArrayList() {
         this.size = 0;
-        this.values = new Object[0];
+        this.values = new Object[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -39,7 +40,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public Object[] toArray() {
-        return values;
+        return Arrays.copyOfRange(values, 0, size);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class MyArrayList<E> implements List<E> {
     }
 
     private Object[] grow() {
-        return Arrays.copyOf(values, size + 1);
+        return Arrays.copyOf(values, values.length * 2);
     }
 
     private Object[] grow(int toAdd) {
@@ -177,10 +178,11 @@ public class MyArrayList<E> implements List<E> {
 
         @Override
         public E next() {
-            if (cursor + 1 > size){
+            if (!hasNext()){
                 throw new NoSuchElementException();
             }
-            lastCursor = cursor++;
+            lastCursor = cursor;
+            cursor++;
             return (E) values[lastCursor];
         }
 
@@ -194,7 +196,8 @@ public class MyArrayList<E> implements List<E> {
             if (!hasPrevious()){
                 throw new NoSuchElementException();
             }
-            lastCursor = cursor--;
+            lastCursor = cursor;
+            cursor--;
             return (E) values[lastCursor];
         }
 
