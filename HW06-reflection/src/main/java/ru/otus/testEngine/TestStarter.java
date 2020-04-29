@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.testEngine;
 
 import ru.otus.annotation.After;
 import ru.otus.annotation.Before;
@@ -38,13 +38,18 @@ public class TestStarter {
 
     public void runTests() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         failedTests = new ArrayList<>();
+        boolean passed;
         for (Method test : testMethods) {
             objectToTest = clazz.getConstructor().newInstance();
             for (Method before : beforeMethods) {
-                runMethod(before);
+                 passed = runMethod(before);
+                 if (!passed){
+                     failedTests.add(test);
+                     return;
+                 }
             }
-            boolean testPassed = runMethod(test);
-            if (!testPassed) {
+            passed = runMethod(test);
+            if (!passed) {
                 failedTests.add(test);
             }
             for (Method after : afterMethods) {
